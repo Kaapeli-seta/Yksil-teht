@@ -26,29 +26,35 @@ const setMap = () => {
   }
 }
 
-const blueIcon = L.divIcon({className: 'blue-icon'});
-const greenIcon = L.divIcon({className: 'green-icon'});
+const CompassGIcon = L.divIcon({className: 'blue-icon'});
+const sodexoIcon = L.divIcon({className: 'green-icon'});
 
 
-const newMarkers = (restaurants: Restaurant[], markerLayer: L.FeatureGroup) =>{
-  if (markerLayer) {
-    markerLayer.clearLayers()
-  }
-  restaurants.forEach((restaurant) => {
+const newMarkers = (restaurant: Restaurant, markerLayer: L.FeatureGroup, tr: HTMLTableRowElement) =>{
     const markLocat = restaurant.location.coordinates.sort((a, b) => b - a) as L.PointTuple 
         // sort is for longitude and latitude flipping (note not a good fix in large scale). 
         // The data inserted flipped into database.
     const markerView = L.marker(markLocat);
     if (restaurant.company === 'Sodexo') {
-      markerView.setIcon(greenIcon)
+      markerView.setIcon(sodexoIcon)
     }
     else {
-      markerView.setIcon(blueIcon)
+      markerView.setIcon(CompassGIcon)
     }
     markerLayer.addLayer(markerView)
-    markerView.bindPopup(`<h3>${restaurant.name}</h3><p>${restaurant.address}.</p>`)
-  })
+    markerView.bindPopup(`<h3>${restaurant.name}</h3><p>${restaurant.address}.</p>`).on('click', () => {
+      try {
+        // remove all highlights
+        const allHighs = document.querySelectorAll('.highlight');
+        allHighs.forEach((high) => {
+          high.classList.remove('highlight');
+      });
 
+        tr.classList.add('highlight');
+      } catch (error) {
+        console.log((error as Error).message);
+      }
+    })
 };
 
 const selfMarker = (mapView: L.Map | undefined, crd: GeolocationCoordinates) => {
@@ -58,7 +64,7 @@ const selfMarker = (mapView: L.Map | undefined, crd: GeolocationCoordinates) => 
   
   const markerSelfL = L.featureGroup().addTo(mapView);
   const selfLocation: L.LatLngExpression = [crd.latitude, crd.longitude]
-  mapView.panTo(new L.LatLng(selfLocation[0], selfLocation[1]))
+  mapView.flyTo(new L.LatLng(selfLocation[0], selfLocation[1]))
   const markerView : L.Marker = L.marker(selfLocation)
   const SelfIcon = L.divIcon({className: 'self-icon'});
   markerView.setIcon(SelfIcon)

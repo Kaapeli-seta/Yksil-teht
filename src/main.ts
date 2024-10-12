@@ -15,6 +15,8 @@ import { calculateDistance } from './distance';
 const modal = document.querySelector('dialog');
 const avatarMainPage =  document.querySelector('#avatar-main-page') as HTMLImageElement;
 const userMainPage = document.querySelector('#username-main-page') as HTMLSpanElement;
+const sfForm = document.querySelector('#sf-form') as HTMLSelectElement;
+const filter = document.querySelector('#filter') as HTMLSelectElement;
 const sorter = document.querySelector('#sorter') as HTMLSelectElement;
 
 // not in use--------
@@ -30,12 +32,12 @@ const token = localStorage.getItem('token');
 const user = await getUserData(token);
 setLoginModal(modal, user);
 addUserDataToDom(user, userMainPage, undefined, avatarMainPage)
-const mapW = setMap();
-if (!mapW) {
+const mapSet = setMap();
+if (!mapSet) {
   throw new Error('Map not found');
 }
-const map = mapW[0] as L.Map
-const markers = mapW[1] as L.FeatureGroup
+const map = mapSet[0] as L.Map
+const markers = mapSet[1] as L.FeatureGroup
 
 
 const fetchRest = async ():Promise<Restaurant[]> =>  {
@@ -66,19 +68,19 @@ const sucsess = async (pos: GeolocationPosition) =>{
 }
 
 function SorterSet(modal: HTMLDialogElement, restaurants: Restaurant[], restaurantsD?: Restaurant[], crd?: GeolocationCoordinates) {
-  const val = sorter.value
-  if (crd && restaurantsD && (val === 'distance')) {
-    console.log(val)
-    createTable(restaurantsD, markers, modal)
+  const valS = sorter.value
+  if (crd && restaurantsD && (valS === 'distance')) {
+    console.log(valS)
+    createTable(restaurantsD, markers, map, modal)
   }
-  if (val === 'name'){
+  if (valS === 'name'){
       restaurants.sort((a: Restaurant, b: Restaurant) =>  a.name.localeCompare(b.name));
-      createTable(restaurants, markers, modal)
+      createTable(restaurants, markers, map, modal)
   }
-  if (val === 'city'){
+  if (valS === 'city'){
       restaurants.sort((a: Restaurant, b: Restaurant) =>  a.name.localeCompare(b.name));
       restaurants.sort((a: Restaurant, b: Restaurant) =>  a.city.localeCompare(b.city));
-      createTable(restaurants, markers, modal)
+      createTable(restaurants, markers, map, modal)
   }
 }
         
@@ -109,41 +111,26 @@ const setData = (restaurants: Restaurant[], crd? : GeolocationCoordinates) => {
       restaurantsDC = NewGeoSort(compassRestaurants, crd)
       restaurantsDS = NewGeoSort(sodexoRestaurants, crd)
     }
-    createTable(restaurants, markers, modal);
+    createTable(restaurants, markers, map, modal);
 
     // buttons for filtering ----
-    const sodexoBtn = document.querySelector('#sodexo');
-    const compassBtn = document.querySelector('#compass');
-    const resetBtn = document.querySelector('#reset');
+
 
     // button filter code ----
-    if (!sodexoBtn){
-      console.error('SodexoBtn missing in html')
-      return;
+
+
+  sfForm.addEventListener('change', () => {
+    const valF = filter.value
+    if (valF === 'all'){
+      SorterSet(modal, restaurants, restaurantsD, crd)
     }
-    sodexoBtn.addEventListener('click', () => {
+    if (valF === 'sodexo'){
       SorterSet(modal, sodexoRestaurants, restaurantsDS, crd)
-    });
-
-    if (!compassBtn){
-      console.error('CompassBtn missing in html')
-      return;
     }
-    compassBtn.addEventListener('click', () => {
+    if (valF === 'compass'){
       SorterSet(modal, compassRestaurants, restaurantsDC, crd)
-    });
-
-    if (!resetBtn){
-      console.error('ResetBtn missing in html')
-      return;
     }
-    resetBtn.addEventListener('click', () => {
-      SorterSet(modal, restaurants, restaurantsD, crd)
-    });
-
-    sorter.addEventListener('change', () => {
-      SorterSet(modal, restaurants, restaurantsD, crd)
-  });
+  }); 
   } catch (error) {
     modal.innerHTML = errorModal((error as Error).message);
     modal.showModal();

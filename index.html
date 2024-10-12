@@ -25,20 +25,19 @@
     <h2>Filter restaurants</h2>
     <div id="map"></div>
     <div id="napit">
-      <button id="sodexo">Sodexo</button>
-      <button id="compass">Compass Group</button>
-      <button id="reset">Show all</button>
-
-    <form>
-      <label for="sorter">Sort:</label>
-      <select id="sorter" name="sorter">
-        <option value="name">Name</option>
-        <option value="distance">Distance</option>
-        <option value="city">City</option>
-      </select>
-      <input type="submit">
-    </form>
-
+      <form id="sf-form">
+        <label for="filter">Filter:</label>
+        <select id="filter" name="filter">
+          <option value="all">all</option>
+          <option value="sodexo">Sodexo</option>
+          <option value="compass">Compass Group</option>
+        </select>
+        <label for="sorter">Sort:</label>
+        <select id="sorter" name="sorter">
+          <option value="name">Name</option>
+          <option value="distance">Distance</option>
+          <option value="city">City</option>
+        </select>
     </div>
 
     <table>

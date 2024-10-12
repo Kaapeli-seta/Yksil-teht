@@ -1,14 +1,17 @@
+import L from "leaflet";
 import { fetchData } from "./functions";
 import { newMarkers } from "./map";
 import { DailyMenu } from "./types/Menu";
 import { Restaurant } from "./types/Restaurant";
 import { apiUrl } from "./variables";
 
-const createTable = (restaurants: Restaurant[], map: L.FeatureGroup | undefined, modal: HTMLDialogElement) => {
+
+const createTable = (restaurants: Restaurant[], markerLayer: L.FeatureGroup | undefined, mapView: L.Map, modal: HTMLDialogElement) => {
     // chech that map exists
-    if (map) {
-      newMarkers(restaurants, map)
+    if (!markerLayer){
+        return;
     }
+    markerLayer.clearLayers()
     const table = document.querySelector('table');
     if (!table){
       console.error('talbe is missing in html');
@@ -16,16 +19,17 @@ const createTable = (restaurants: Restaurant[], map: L.FeatureGroup | undefined,
     }
     table.innerHTML = '';
     restaurants.forEach((restaurant) => {
-      const tr = restaurantRow(restaurant);
-      table.appendChild(tr);
-      tr.addEventListener('click', async () => {
+        const tr = restaurantRow(restaurant);
+        table.appendChild(tr);
+        newMarkers(restaurant, markerLayer, tr)
+        tr.addEventListener('click', async () => {
         try {
           // remove all highlights
           const allHighs = document.querySelectorAll('.highlight');
           allHighs.forEach((high) => {
             high.classList.remove('highlight');
-          });
-          // add highlight
+        });
+        mapView.flyTo(new L.LatLng(restaurant.location.coordinates[0], restaurant.location.coordinates[1]), 16)
           tr.classList.add('highlight');
           // add restaurant data to modal
           modal.innerHTML = '';
