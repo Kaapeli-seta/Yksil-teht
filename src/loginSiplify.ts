@@ -41,7 +41,6 @@ const updateUserData = async (user: UpdateUser, token: string | null): Promise<U
     return result
   };
 
-;
 
 const addUserDataToDom = (
     token?: string | null,

@@ -81,14 +81,15 @@ const restaurantRow = (restaurant: Restaurant, modal: HTMLDialogElement) => {
             modal.showModal();
         }
       });
+    
     const FbuttonCell = document.createElement('button');
+    const token = localStorage.getItem('token');
+    if (!token){
+        FbuttonCell.disabled = true
+    }
+
     FbuttonCell.innerText = 'Favorit';
     FbuttonCell.addEventListener('click', async () => {
-        const token = localStorage.getItem('token');
-        if (!token){
-            alert('pleas log in')
-            return
-        }
         const data: Favorit = {
             favouriteRestaurant: _id
           };
