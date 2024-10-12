@@ -6,7 +6,7 @@ import {Restaurant} from './types/Restaurant';
 import { selfMarker, setMap } from './map';
 import './main.css'
 import { setLoginModal } from './loginFunc';
-import { addUserDataToDom, getUserData } from './loginSiplify';
+import { addUserDataToDom} from './loginSiplify';
 import { createTable } from './createTable';
 import { calculateDistance } from './distance';
 
@@ -29,9 +29,8 @@ modal.addEventListener('', () => {
 //------------
 
 const token = localStorage.getItem('token');
-const user = await getUserData(token);
-setLoginModal(modal, user);
-addUserDataToDom(user, userMainPage, undefined, avatarMainPage)
+setLoginModal(modal);
+addUserDataToDom(token, userMainPage, undefined, avatarMainPage)
 const mapSet = setMap();
 if (!mapSet) {
   throw new Error('Map not found');
@@ -49,13 +48,19 @@ const fetchRest = async ():Promise<Restaurant[]> =>  {
 
 const error = async (err: GeolocationPositionError) => {
   console.warn(`ERROR(${err.code}): ${err.message}`);
+  try{
   const restaurants = await fetchRest();
   setData(restaurants);
+  } catch (error) {
+    modal.innerHTML = errorModal((error as Error).message);
+    modal.showModal();
+  }
 };
 
 
 
 const sucsess = async (pos: GeolocationPosition) =>{
+  try{
   const restaurants = await fetchRest();
   const crd = pos.coords;
   selfMarker(map, crd)
@@ -65,7 +70,26 @@ const sucsess = async (pos: GeolocationPosition) =>{
       console.log(restaurants)
 
   setData(restaurants, crd)
-}
+  } catch (error) {
+    modal.innerHTML = errorModal((error as Error).message);
+    modal.showModal();
+  }
+
+};
+
+function NewGeoSort(restaurants: Restaurant[], crd: GeolocationCoordinates) {
+  return restaurants.toSorted((a: Restaurant, b: Restaurant) => {
+    const locLati = crd.latitude;
+    const locLongi = crd.longitude;
+    const latiA = a.location.coordinates[1];
+    const longiA = a.location.coordinates[0];
+    const distanceA = calculateDistance(locLati, locLongi, latiA, longiA);
+    const latiB = b.location.coordinates[1];
+    const longiB = b.location.coordinates[0];
+    const distanceB = calculateDistance(locLati, locLongi, latiB, longiB);
+    return distanceA - distanceB;
+  });  
+};
 
 function SorterSet(modal: HTMLDialogElement, restaurants: Restaurant[], restaurantsD?: Restaurant[], crd?: GeolocationCoordinates) {
   const valS = sorter.value
@@ -81,22 +105,9 @@ function SorterSet(modal: HTMLDialogElement, restaurants: Restaurant[], restaura
       restaurants.sort((a: Restaurant, b: Restaurant) =>  a.name.localeCompare(b.name));
       restaurants.sort((a: Restaurant, b: Restaurant) =>  a.city.localeCompare(b.city));
       createTable(restaurants, markers, map, modal)
-  }
-}
-        
-function NewGeoSort(restaurants: Restaurant[], crd: GeolocationCoordinates) {
-  return restaurants.toSorted((a: Restaurant, b: Restaurant) => {
-    const locLati = crd.latitude;
-    const locLongi = crd.longitude;
-    const latiA = a.location.coordinates[1];
-    const longiA = a.location.coordinates[0];
-    const distanceA = calculateDistance(locLati, locLongi, latiA, longiA);
-    const latiB = b.location.coordinates[1];
-    const longiB = b.location.coordinates[0];
-    const distanceB = calculateDistance(locLati, locLongi, latiB, longiB);
-    return distanceA - distanceB;
-  });  
+    }
 };
+        
 
 const setData = (restaurants: Restaurant[], crd? : GeolocationCoordinates) => {
   let restaurantsD : Restaurant[];
@@ -104,21 +115,16 @@ const setData = (restaurants: Restaurant[], crd? : GeolocationCoordinates) => {
   let restaurantsDS : Restaurant[];
   const compassRestaurants = restaurants.filter((restaurant) => restaurant.company === 'Compass Group');
   const sodexoRestaurants = restaurants.filter((restaurant) => restaurant.company === 'Sodexo');
-  try {
-    if (crd){
-      // could not add calculateDistance to event listenere it bugged for somereason
-      restaurantsD = NewGeoSort(restaurants, crd)
-      restaurantsDC = NewGeoSort(compassRestaurants, crd)
-      restaurantsDS = NewGeoSort(sodexoRestaurants, crd)
-    }
-    createTable(restaurants, markers, map, modal);
 
-    // buttons for filtering ----
+  if (crd){
+    // could not add calculateDistance to event listenere it bugged for somereason
+    restaurantsD = NewGeoSort(restaurants, crd)
+    restaurantsDC = NewGeoSort(compassRestaurants, crd)
+    restaurantsDS = NewGeoSort(sodexoRestaurants, crd)
+  };
 
 
-    // button filter code ----
-
-
+  createTable(restaurants, markers, map, modal);
   sfForm.addEventListener('change', () => {
     const valF = filter.value
     if (valF === 'all'){
@@ -131,9 +137,6 @@ const setData = (restaurants: Restaurant[], crd? : GeolocationCoordinates) => {
       SorterSet(modal, compassRestaurants, restaurantsDC, crd)
     }
   }); 
-  } catch (error) {
-    modal.innerHTML = errorModal((error as Error).message);
-    modal.showModal();
-  }
+
 };
 navigator.geolocation.getCurrentPosition(sucsess, error, positionOptions)

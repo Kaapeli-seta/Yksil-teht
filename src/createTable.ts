@@ -4,7 +4,24 @@ import { newMarkers } from "./map";
 import { DailyMenu } from "./types/Menu";
 import { Restaurant } from "./types/Restaurant";
 import { apiUrl } from "./variables";
+import { Favorit, LoginUser } from "./interfaces/User";
+import { UpdateResult } from "./interfaces/UpdateResult";
+import { addUserDataToDom } from "./loginSiplify";
 
+
+
+const updateFavorite = async (userFav: Favorit, token: string | null): Promise<UpdateResult> => {
+    const options: RequestInit = {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      },
+      body: JSON.stringify(userFav),
+    };
+    const result = await fetchData<LoginUser>(apiUrl + '/users', options);
+    return result
+  };
 
 const createTable = (restaurants: Restaurant[], markerLayer: L.FeatureGroup | undefined, mapView: L.Map, modal: HTMLDialogElement) => {
     // chech that map exists
@@ -19,36 +36,27 @@ const createTable = (restaurants: Restaurant[], markerLayer: L.FeatureGroup | un
     }
     table.innerHTML = '';
     restaurants.forEach((restaurant) => {
-        const tr = restaurantRow(restaurant);
+        const tr = restaurantRow(restaurant, modal);
+        // const fav = restaurantRow(restaurant)[2] as HTMLButtonElement
         table.appendChild(tr);
-        newMarkers(restaurant, markerLayer, tr)
+        newMarkers(restaurant, markerLayer, tr);
+        
         tr.addEventListener('click', async () => {
-        try {
           // remove all highlights
           const allHighs = document.querySelectorAll('.highlight');
           allHighs.forEach((high) => {
             high.classList.remove('highlight');
         });
-        mapView.flyTo(new L.LatLng(restaurant.location.coordinates[0], restaurant.location.coordinates[1]), 16)
+        mapView.flyTo(new L.LatLng(restaurant.location.coordinates[0], restaurant.location.coordinates[1]), 14)
           tr.classList.add('highlight');
           // add restaurant data to modal
           modal.innerHTML = '';
-          // fetch menu
-          const menu = await fetchData<DailyMenu> (apiUrl + `/restaurants/daily/${restaurant._id}/fi`);
-          console.log(menu);
-          const menuHtml = restaurantModal(restaurant, menu);
-          modal.insertAdjacentHTML('beforeend', menuHtml);
-          modal.showModal();
-        } catch (error) {
-          modal.innerHTML = errorModal((error as Error).message);
-          modal.showModal();
-        }
       });
     });
 };
 
-const restaurantRow = (restaurant: Restaurant) => {
-    const {name, address, company, city} = restaurant;
+const restaurantRow = (restaurant: Restaurant, modal: HTMLDialogElement) => {
+    const {name, address, company, city, _id} = restaurant;
     const tr = document.createElement('tr');
     const nameCell = document.createElement('td');
     nameCell.innerText = name;
@@ -58,10 +66,43 @@ const restaurantRow = (restaurant: Restaurant) => {
     companyCell.innerText = company;
     const cityCell = document.createElement('td');
     cityCell.innerText = city;
+    const MbuttonCell = document.createElement('button');
+    MbuttonCell.innerText = 'Menu';
+    MbuttonCell.addEventListener('click', async () => {
+        try{
+            // fetch menu
+            const menu = await fetchData<DailyMenu> (apiUrl + `/restaurants/daily/${restaurant._id}/fi`);
+            console.log(menu);
+            const menuHtml = restaurantModal(restaurant, menu);
+            modal.insertAdjacentHTML('beforeend', menuHtml);
+            modal.showModal();
+        } catch (error) {
+            modal.innerHTML = errorModal((error as Error).message);
+            modal.showModal();
+        }
+      });
+    const FbuttonCell = document.createElement('button');
+    FbuttonCell.innerText = 'Favorit';
+    FbuttonCell.addEventListener('click', async () => {
+        const token = localStorage.getItem('token');
+        if (!token){
+            alert('pleas log in')
+            return
+        }
+        const data: Favorit = {
+            favouriteRestaurant: _id
+          };
+          const updateResult = await updateFavorite(data, token)
+          console.log(updateResult)
+          addUserDataToDom(token)
+      });
+
     tr.appendChild(nameCell);
     tr.appendChild(addressCell);
     tr.appendChild(companyCell);
     tr.appendChild(cityCell);
+    tr.appendChild(MbuttonCell);
+    tr.appendChild(FbuttonCell);
     return tr;
 };
   

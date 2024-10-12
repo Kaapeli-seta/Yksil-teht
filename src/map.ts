@@ -11,11 +11,10 @@ const setMap = () => {
     zoom: 11,
   });
 
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  L.tileLayer('http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}', {
     maxZoom: 19,
     minZoom: 4,
-    attribution:
-      '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    subdomains:['mt0','mt1','mt2','mt3']
   }).addTo(mapView);
   
   console.log("Map wokrs")
@@ -42,7 +41,7 @@ const newMarkers = (restaurant: Restaurant, markerLayer: L.FeatureGroup, tr: HTM
       markerView.setIcon(CompassGIcon)
     }
     markerLayer.addLayer(markerView)
-    markerView.bindPopup(`<h3>${restaurant.name}</h3><p>${restaurant.address}.</p>`).on('click', () => {
+    markerView.bindPopup(`<h3>${restaurant.name}</h3><p>${restaurant.address}.</p>`, {closeButton: false}).on('click', () => {
       try {
         // remove all highlights
         const allHighs = document.querySelectorAll('.highlight');
@@ -69,7 +68,7 @@ const selfMarker = (mapView: L.Map | undefined, crd: GeolocationCoordinates) => 
   const SelfIcon = L.divIcon({className: 'self-icon'});
   markerView.setIcon(SelfIcon)
   markerSelfL.addLayer(markerView)
-  markerView.bindPopup(`<h3>Your location</h3><p>you are here.</p>`)
+  markerView.bindPopup(`<h3>Your location</h3><p>you are here.</p>`, {closeButton: false})
 }
 
 

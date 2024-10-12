@@ -1,12 +1,12 @@
 
 import {fetchData} from './functions';
 import {UpdateResult} from './interfaces/UpdateResult';
-import { User } from './interfaces/User';
+
 // import {UploadResult} from './interfaces/UploadResult';
 import { addUserDataToDom, updateUserData, login } from './loginSiplify';
 import {apiUrl} from './variables';
 
-const setLoginModal = (modal: HTMLDialogElement, user: User | void) =>{
+const setLoginModal = (modal: HTMLDialogElement) =>{
 
 const loginButtonFrame = document.querySelector('#loginButtonFrame')
 
@@ -41,6 +41,7 @@ if (loginButtonFrame) {
           <h2>Profile</h2>
           <p>Username: <span id="username-target"></span></p>
           <p>email: <span id="email-target"></span></p>
+          <p>Favorit Restaurant: <span id="favorit-target"></span></p>
           <form id="select-form">
           <input type="image" id="avatar-target" src="" name="saveForm" class=""/>
             <div class="form-control">
@@ -59,8 +60,9 @@ if (loginButtonFrame) {
       const usernameTarget = document.querySelector('#username-target') as HTMLSpanElement;
       const emailTarget = document.querySelector('#email-target') as HTMLSpanElement;
       const avatarTarget = document.querySelector('#avatar-target') as HTMLImageElement;
+      const favoritTarget = document.querySelector('#favorit-target') as HTMLSpanElement;
       loginDetect ()
-      addUserDataToDom(user, usernameTarget, emailTarget, avatarTarget)
+      addUserDataToDom(token, usernameTarget, emailTarget, avatarTarget, favoritTarget)
       userEditFormatter(usernameTarget, emailTarget, avatarTarget);
       modal.showModal();
     })
@@ -136,7 +138,7 @@ function userEditFormatter (usernameTarget: HTMLSpanElement, emailTarget: HTMLSp
           const updateResult = await updateUserData(data, token);
           console.log(updateResult)
     
-          addUserDataToDom(updateResult.data, usernameTarget, emailTarget)
+          addUserDataToDom(token, usernameTarget, emailTarget)
           alert('update ok')
         } catch (error) {
             console.log((error as Error).message);

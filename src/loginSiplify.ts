@@ -1,6 +1,7 @@
 import { fetchData } from "./functions";
 import { UpdateResult } from "./interfaces/UpdateResult";
 import { LoginUser, UpdateUser, User } from "./interfaces/User";
+import { Restaurant } from "./types/Restaurant";
 import { apiUrl, uploadUrl } from "./variables";
 
 
@@ -40,17 +41,29 @@ const updateUserData = async (user: UpdateUser, token: string | null): Promise<U
     return result
   };
 
+;
 
 const addUserDataToDom = (
-    user: User | void, 
+    token?: string | null,
     usernameTarget?:HTMLSpanElement, 
     emailTarget?: HTMLSpanElement,
-    avatarTarget?: HTMLImageElement
+    avatarTarget?: HTMLImageElement,
+    favoritTarget?: HTMLSpanElement
 ): void => {
+    if (!token){return}
+    const user = async () => await getUserData(token);
+    user().then((user) => {
+    console.log('Dom Updatad')
     if (!user) {return;}
     if (usernameTarget) {usernameTarget.innerHTML = user.username;} 
     if (emailTarget) {emailTarget.innerHTML = user.email;}
     if (avatarTarget) {avatarTarget.src = uploadUrl + user.avatar;}
+    if (favoritTarget) {
+        const name = async (): Promise<Restaurant["name"]> => {return (await fetchData<Restaurant>(apiUrl + `/restaurants/${user.favouriteRestaurant}`)).name}
+         name().then((name) => favoritTarget.innerHTML = name) ;
+         console.log(user.favouriteRestaurant)
+        }
+    })
 }
 
 

@@ -20,4 +20,9 @@ interface UpdateUser {
   email: string;
 }
 
-export type {User, LoginUser, UpdateUser};
+interface Favorit {
+  favouriteRestaurant: string;
+}
+
+
+export type {User, LoginUser, UpdateUser, Favorit};
