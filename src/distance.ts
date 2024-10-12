@@ -2,6 +2,7 @@
     Math.sqrt((lati - locLati) ** 2 + (longi - locLongi) ** 2);
 
  */
+
 function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
 
     const R = 6371; // Radius of the earth in km
