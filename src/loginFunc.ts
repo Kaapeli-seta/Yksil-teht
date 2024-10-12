@@ -1,0 +1,242 @@
+
+import {fetchData} from './functions';
+import {UpdateResult} from './interfaces/UpdateResult';
+import { User } from './interfaces/User';
+// import {UploadResult} from './interfaces/UploadResult';
+import { addUserDataToDom, updateUserData, login } from './loginSiplify';
+import {apiUrl} from './variables';
+
+const setLoginModal = (modal: HTMLDialogElement, user: User | void) =>{
+
+const loginButtonFrame = document.querySelector('#loginButtonFrame')
+
+if (loginButtonFrame) {
+    loginButtonFrame.addEventListener('click', async () => {
+        modal.innerHTML = ''
+        const token = localStorage.getItem('token')
+        
+        if (!token) {
+          modal.innerHTML = `    
+          <section id="login">
+            <h2>Login</h2>
+            <p>Login to get user data</p>
+            <form id="login-form">
+              <div class="form-control">
+                <input id="username" type="text" name="username">
+                <label for="username">Usename</label>
+              </div>
+              <div class="form-control">
+                <input id="password" type="password" name="password">
+                <label for="password">Password</label>
+              </div>
+              <div class="form-control">
+                <input type="submit" value="Login" class="button">
+              </div>
+            </form>
+          </section>`
+        }
+      else {        
+        modal.innerHTML = `    
+        <section id="profile">
+          <h2>Profile</h2>
+          <p>Username: <span id="username-target"></span></p>
+          <p>email: <span id="email-target"></span></p>
+          <form id="select-form">
+          <input type="image" id="avatar-target" src="" name="saveForm" class=""/>
+            <div class="form-control">
+              <input type="submit" id="profile-info" value="Eddit profile" class="button">
+            </div>
+            </form>
+        </section>
+          <div id="edit-profile" style="display: none;">
+
+          </div>
+
+        <div>
+          <button id="logout" class="button">Logout</button>
+        </div>`
+      }
+      const usernameTarget = document.querySelector('#username-target') as HTMLSpanElement;
+      const emailTarget = document.querySelector('#email-target') as HTMLSpanElement;
+      const avatarTarget = document.querySelector('#avatar-target') as HTMLImageElement;
+      loginDetect ()
+      addUserDataToDom(user, usernameTarget, emailTarget, avatarTarget)
+      userEditFormatter(usernameTarget, emailTarget, avatarTarget);
+      modal.showModal();
+    })
+    
+}
+};
+
+function userEditFormatter (usernameTarget: HTMLSpanElement, emailTarget: HTMLSpanElement, avatarTarget: HTMLImageElement) {
+  const profileInfo = document.querySelector('#profile-info') as HTMLSpanElement | null;
+  const editProfile = document.querySelector('#edit-profile') as HTMLSpanElement | null;
+
+  
+  if (!profileInfo) {
+    return;
+  }
+
+  profileInfo.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    if(!editProfile){
+      return;
+    }
+    editProfile.style.display = 'block'
+
+    editProfile.innerHTML = `
+      <h2>Edit profile</h2>
+      <form id="profile-form">
+
+        <div class="form-control">
+          <input id="profile-username" type="text" name="username">
+          <label for="profile-username">Username</label>
+        </div>
+
+        <div class="form-control">
+          <input id="profile-email" type="email" name="email">
+          <label for="profile-email">Email</label>
+        </div>
+
+        <div class="form-control">
+          <input type="submit" value="Update" class="button">
+        </div>
+      </form>
+    `
+
+    
+    const profileForm = document.querySelector('#profile-form') as HTMLFormElement | null;
+    //update info
+    const profileUsernameInput = document.querySelector(
+      '#profile-username'
+    ) as HTMLInputElement | null;
+    const profileEmailInput = document.querySelector(
+      '#profile-email'
+    ) as HTMLInputElement | null;
+
+    if (profileForm) {
+      profileForm.addEventListener('submit', async (evt) => {
+        try {
+          evt.preventDefault();
+          const token = localStorage.getItem('token')
+          if (!token) {
+            alert('please log in')
+            return
+          }
+          if (!profileUsernameInput || !profileEmailInput){
+            throw new Error('elementti ei saatavilla')
+          }
+          const username = profileUsernameInput.value;
+          const email = profileEmailInput.value;
+    
+          const data = {
+            username,
+            email
+          };
+          const updateResult = await updateUserData(data, token);
+          console.log(updateResult)
+    
+          addUserDataToDom(updateResult.data, usernameTarget, emailTarget)
+          alert('update ok')
+        } catch (error) {
+            console.log((error as Error).message);
+          }
+      });
+    
+    }
+
+  });
+
+  if (!avatarTarget) {
+    return;
+  }
+  
+  avatarTarget.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    if(!editProfile){
+      return;
+    }
+    editProfile.style.display = 'block'
+     editProfile.innerHTML = `
+      <h2>Upload avatar</h2>
+      <form id="avatar-form">
+        <div class="form-control">
+          <input id="avatar" type="file" name="avatar">
+          <label for="avatar">Choose image</label>
+        </div>
+        <div class="form-control">
+          <input type="submit" value="Uppload" class="button">
+        </div>
+      </form>`
+
+      const avatarForm = document.querySelector('#avatar-form') as HTMLFormElement | null;
+
+    if (avatarForm) {
+      console.log('form found')
+      avatarForm.addEventListener('submit', async (evt) => {
+        evt.preventDefault();
+        const fd = new FormData(avatarForm);
+        const token = localStorage.getItem('token')
+        const options: RequestInit = {
+          method: 'POST',
+          headers: {
+            Authorization: 'Bearer ' + token,
+          },
+          body: fd
+        }
+        const UploadResult = await fetchData<UpdateResult>(apiUrl + '/users/avatar', options);
+        
+        /// chck something
+        console.log(UploadResult);
+      });
+    }
+
+  });
+
+
+};
+
+function loginDetect () {
+
+// select forms
+const loginForm = document.querySelector('#login-form') as HTMLFormElement | null;
+
+// logout button
+const logoutButton = document.querySelector('#logout');
+
+// select inputs
+const usernameInput = document.querySelector(
+  '#username'
+) as HTMLInputElement | null;
+const passwordInput = document.querySelector(
+  '#password'
+) as HTMLInputElement | null;
+
+
+if (loginForm) {
+  loginForm.addEventListener('submit', async (evt) => {
+    try {
+    evt.preventDefault();
+    const loginResult = await login(passwordInput, usernameInput);
+    console.log(loginResult)
+    localStorage.setItem('token', loginResult.token)
+
+    location.reload()
+    } catch (error) {
+      console.log((error as Error).message);
+    }
+  });
+}
+
+
+logoutButton?.addEventListener('click', () => {
+  localStorage.removeItem('token');
+  location.href = './';
+});
+
+
+}
+
+
+
+export {setLoginModal, loginDetect};
