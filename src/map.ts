@@ -8,7 +8,7 @@ const setMap = () => {
   try {
   const mapView = L.map('map', {
     center: [60.188222, 24.829696],
-    zoom: 10,
+    zoom: 11,
   });
 
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -55,13 +55,15 @@ const selfMarker = (mapView: L.Map | undefined, crd: GeolocationCoordinates) => 
   if (!mapView) {
     return;
   }
+  
   const markerSelfL = L.featureGroup().addTo(mapView);
   const selfLocation: L.LatLngExpression = [crd.latitude, crd.longitude]
+  mapView.panTo(new L.LatLng(selfLocation[0], selfLocation[1]))
   const markerView : L.Marker = L.marker(selfLocation)
   const SelfIcon = L.divIcon({className: 'self-icon'});
   markerView.setIcon(SelfIcon)
   markerSelfL.addLayer(markerView)
-  markerView.bindPopup(`<h3>Your location</h3><p>you are here.</p>`).openPopup()
+  markerView.bindPopup(`<h3>Your location</h3><p>you are here.</p>`)
 }
 
 

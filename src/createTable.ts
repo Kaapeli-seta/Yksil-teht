@@ -44,7 +44,7 @@ const createTable = (restaurants: Restaurant[], map: L.FeatureGroup | undefined,
 };
 
 const restaurantRow = (restaurant: Restaurant) => {
-    const {name, address, company} = restaurant;
+    const {name, address, company, city} = restaurant;
     const tr = document.createElement('tr');
     const nameCell = document.createElement('td');
     nameCell.innerText = name;
@@ -52,9 +52,12 @@ const restaurantRow = (restaurant: Restaurant) => {
     addressCell.innerText = address;
     const companyCell = document.createElement('td');
     companyCell.innerText = company;
+    const cityCell = document.createElement('td');
+    cityCell.innerText = city;
     tr.appendChild(nameCell);
     tr.appendChild(addressCell);
     tr.appendChild(companyCell);
+    tr.appendChild(cityCell);
     return tr;
 };
   
