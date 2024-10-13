@@ -11,10 +11,10 @@ const setMap = () => {
     zoom: 11,
   });
 
-  L.tileLayer('http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}', {
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     minZoom: 4,
-    subdomains:['mt0','mt1','mt2','mt3']
+
   }).addTo(mapView);
   
   console.log("Map wokrs")
@@ -25,8 +25,18 @@ const setMap = () => {
   }
 }
 
-const CompassGIcon = L.divIcon({className: 'blue-icon'});
-const sodexoIcon = L.divIcon({className: 'green-icon'});
+const CompassGIcon = L.icon({
+  iconUrl: '../public/img/Compass-marker-50x82.png',
+  iconSize:     [25, 41], // size of the icon
+  iconAnchor:   [0, 28], // point of the icon which will correspond to marker's location
+  popupAnchor:  [12.5, -20.5] // point from which the popup should open relative to the iconAnchor
+});
+const sodexoIcon = L.icon({
+  iconUrl: '../public/img/Sodexo-marker-50x82.png',
+  iconSize:     [25, 41], 
+  iconAnchor:   [0, 28], 
+  popupAnchor:  [12.5, -20.5] 
+});
 
 
 const newMarkers = (restaurant: Restaurant, markerLayer: L.FeatureGroup, tr: HTMLTableRowElement) =>{
@@ -41,7 +51,7 @@ const newMarkers = (restaurant: Restaurant, markerLayer: L.FeatureGroup, tr: HTM
       markerView.setIcon(CompassGIcon)
     }
     markerLayer.addLayer(markerView)
-    markerView.bindPopup(`<h3>${restaurant.name}</h3><p>${restaurant.address}.</p>`, {closeButton: false}).on('click', () => {
+    markerView.bindPopup(`<h3>${restaurant.name}</h3><p>${restaurant.address}</p>`, {closeButton: false, maxHeight: 200}).on('click', () => {
       try {
         // remove all highlights
         const allHighs = document.querySelectorAll('.highlight');
@@ -65,10 +75,15 @@ const selfMarker = (mapView: L.Map | undefined, crd: GeolocationCoordinates) => 
   const selfLocation: L.LatLngExpression = [crd.latitude, crd.longitude]
   mapView.flyTo(new L.LatLng(selfLocation[0], selfLocation[1]))
   const markerView : L.Marker = L.marker(selfLocation)
-  const SelfIcon = L.divIcon({className: 'self-icon'});
+  const SelfIcon = L.icon({
+    iconUrl: '../public/img/self-marker-50x82.png',
+    iconSize:     [25, 41],
+    iconAnchor:   [0, 28], 
+    popupAnchor:  [12.5, -20.5] 
+});
   markerView.setIcon(SelfIcon)
   markerSelfL.addLayer(markerView)
-  markerView.bindPopup(`<h3>Your location</h3><p>you are here.</p>`, {closeButton: false})
+  markerView.bindPopup(`<h3>Your location</h3><p>you are here.</p>`, {closeButton: false, maxHeight: 200})
 }
 
 

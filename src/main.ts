@@ -9,28 +9,36 @@ import { setLoginModal } from './loginFunc';
 import { addUserDataToDom} from './loginSiplify';
 import { createTable } from './createTable';
 import { calculateDistance } from './distance';
+import { NavButtons } from './mainButtons';
 
 
 
 const modal = document.querySelector('dialog');
-const avatarMainPage =  document.querySelector('#avatar-main-page') as HTMLImageElement;
-const userMainPage = document.querySelector('#username-main-page') as HTMLSpanElement;
+
 const sfForm = document.querySelector('#sf-form') as HTMLSelectElement;
 const filter = document.querySelector('#filter') as HTMLSelectElement;
 const sorter = document.querySelector('#sorter') as HTMLSelectElement;
 
-// not in use--------
+
+
 if (!modal) {
   throw new Error('Modal not found');
 }
-modal.addEventListener('', () => {
-  modal.close();
-});
-//------------
 
+NavButtons()
 const token = localStorage.getItem('token');
+if (!token) {
+  const auserinfoMainPage =  document.querySelector('#userinfo-main-page') as HTMLImageElement;
+  if (auserinfoMainPage) {
+    auserinfoMainPage.style.display = "none";
+  }
+}
+if (token){
+  const Loginbutton = document.querySelector('#login-button-frame') as HTMLButtonElement
+  Loginbutton.innerHTML = `<i class="fa-solid fa-gears"></i>`
+}
 setLoginModal(modal);
-addUserDataToDom(token, userMainPage, undefined, avatarMainPage)
+addUserDataToDom(token)
 const mapSet = setMap();
 if (!mapSet) {
   throw new Error('Map not found');

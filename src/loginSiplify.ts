@@ -52,11 +52,23 @@ const addUserDataToDom = (
     if (!token){return}
     const user = async () => await getUserData(token);
     user().then((user) => {
-    console.log('Dom Updatad')
-    if (!user) {return;}
+      if (!user) {return;}
+    //update the main page
+    const avatarMainPage =  document.querySelector('#avatar-main-page') as HTMLImageElement;
+    const userMainPage = document.querySelector('#username-main-page') as HTMLSpanElement;
+    if (userMainPage) {userMainPage.innerHTML = user.username;} 
+    if (avatarMainPage) {
+      avatarMainPage.src = uploadUrl + user.avatar;
+    }
+
+
+    //update the moadal if awailable
+
     if (usernameTarget) {usernameTarget.innerHTML = user.username;} 
     if (emailTarget) {emailTarget.innerHTML = user.email;}
-    if (avatarTarget) {avatarTarget.src = uploadUrl + user.avatar;}
+    if (avatarTarget) {
+      avatarTarget.src = uploadUrl + user.avatar;
+    }
     if (favoritTarget) {
         const name = async (): Promise<Restaurant["name"]> => {return (await fetchData<Restaurant>(apiUrl + `/restaurants/${user.favouriteRestaurant}`)).name}
          name().then((name) => favoritTarget.innerHTML = name) ;

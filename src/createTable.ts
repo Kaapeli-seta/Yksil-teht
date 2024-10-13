@@ -75,6 +75,10 @@ const restaurantRow = (restaurant: Restaurant, modal: HTMLDialogElement) => {
             console.log(menu);
             const menuHtml = restaurantModal(restaurant, menu);
             modal.insertAdjacentHTML('beforeend', menuHtml);
+            const closer = document.querySelector('#close') as HTMLButtonElement;
+            closer.addEventListener('click', () => {
+              modal.close();
+            }, {once: true});
             modal.showModal();
         } catch (error) {
             modal.innerHTML = errorModal((error as Error).message);
@@ -88,7 +92,7 @@ const restaurantRow = (restaurant: Restaurant, modal: HTMLDialogElement) => {
         FbuttonCell.disabled = true
     }
 
-    FbuttonCell.innerText = 'Favorit';
+    FbuttonCell.innerHTML = `<i class="fa-regular fa-star"></i>`;
     FbuttonCell.addEventListener('click', async () => {
         const data: Favorit = {
             favouriteRestaurant: _id
@@ -110,6 +114,7 @@ const restaurantRow = (restaurant: Restaurant, modal: HTMLDialogElement) => {
 const restaurantModal = (restaurant: Restaurant, menu: DailyMenu) => {
     const {name, address, city, postalCode, phone, company} = restaurant;
     let html = `<h3>${name}</h3>
+      <button id="close" class="user-option">X</button>
       <p>${company}</p>
       <p>${address} ${postalCode} ${city}</p>
       <p>${phone}</p>
@@ -131,6 +136,7 @@ const restaurantModal = (restaurant: Restaurant, menu: DailyMenu) => {
             `;
     });
     html += '</table>';
+
     return html;
 };
 

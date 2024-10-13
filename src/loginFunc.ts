@@ -8,7 +8,7 @@ import {apiUrl} from './variables';
 
 const setLoginModal = (modal: HTMLDialogElement) =>{
 
-const loginButtonFrame = document.querySelector('#loginButtonFrame')
+const loginButtonFrame = document.querySelector('#login-button-frame')
 
 if (loginButtonFrame) {
     loginButtonFrame.addEventListener('click', async () => {
@@ -18,7 +18,10 @@ if (loginButtonFrame) {
         if (!token) {
           modal.innerHTML = `    
           <section id="login">
+            <div id="dialog-head">
             <h2>Login</h2>
+            <button id="close" class="user-option">X</button>
+          </div>
             <p>Login to get user data</p>
             <form id="login-form">
               <div class="form-control">
@@ -34,28 +37,40 @@ if (loginButtonFrame) {
               </div>
             </form>
           </section>`
+          const closer = document.querySelector('#close') as HTMLButtonElement;
+          closer.addEventListener('click', () => {
+            modal.close();
+          }, {once: true});
         }
       else {        
         modal.innerHTML = `    
         <section id="profile">
-          <h2>Profile</h2>
+          <div id="dialog-head">
+            <h2>Profile</h2>
+            <button id="close" class="user-option">X</button>
+          </div>
           <p>Username: <span id="username-target"></span></p>
           <p>email: <span id="email-target"></span></p>
           <p>Favorit Restaurant: <span id="favorit-target"></span></p>
           <form id="select-form">
-          <input type="image" id="avatar-target" src="" name="saveForm" class=""/>
-            <div class="form-control">
-              <input type="submit" id="profile-info" value="Eddit profile" class="button">
+          <div id="avatar-background">
+          <p><i class="fa-solid fa-pen-to-square"></i></p>
+            <input type="image" id="avatar-target" src="" name="saveForm" class=""/>
+          </div>
+            <div class="form-control" id="user-options">
+              <input type="submit" id="profile-info" value="Eddit profile" class="user-option">
+              
+              <button id="logout" class="user-option">Logout</button>
             </div>
             </form>
         </section>
           <div id="edit-profile" style="display: none;">
 
-          </div>
-
-        <div>
-          <button id="logout" class="button">Logout</button>
-        </div>`
+          </div>`
+          const closer = document.querySelector('#close') as HTMLButtonElement;
+          closer.addEventListener('click', () => {
+            modal.close();
+          }, {once: true});
       }
       const usernameTarget = document.querySelector('#username-target') as HTMLSpanElement;
       const emailTarget = document.querySelector('#email-target') as HTMLSpanElement;
@@ -163,11 +178,11 @@ function userEditFormatter (usernameTarget: HTMLSpanElement, emailTarget: HTMLSp
       <h2>Upload avatar</h2>
       <form id="avatar-form">
         <div class="form-control">
-          <input id="avatar" type="file" name="avatar">
-          <label for="avatar">Choose image</label>
+          <input id="avatar" type="file" name="avatar" >
+          <label for="avatar" class="user-option">Choose image</label>
         </div>
         <div class="form-control">
-          <input type="submit" value="Uppload" class="button">
+          <input type="submit" value="Uppload" class="button user-option">
         </div>
       </form>`
 
@@ -190,6 +205,7 @@ function userEditFormatter (usernameTarget: HTMLSpanElement, emailTarget: HTMLSp
         
         /// chck something
         console.log(UploadResult);
+        addUserDataToDom(token, undefined, undefined, avatarTarget)
       });
     }
 
