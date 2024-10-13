@@ -32,10 +32,25 @@ export default defineConfig({
       theme_color: '#ffffff',
       icons: [
         {
-            src: 'img/Wood-512x512.png',
-            sizes: '512x512',
+            src: 'img/PageIcon-192x192.png',
+            sizes: '192x192',
             type: 'image/png'
-        }
+        },
+        {
+          src: 'img/PageIcon-256x256.png',
+          sizes: '256x256',
+          type: 'image/png'
+      },
+      {
+        src: 'img/PageIcon-192x192-alt.png',
+        sizes: '192x192',
+        type: 'image/png'
+    },
+    {
+      src: 'img/PageIcon-256x256-alt.png',
+      sizes: '256x256',
+      type: 'imag/png'
+  }
     ]
     }
   })

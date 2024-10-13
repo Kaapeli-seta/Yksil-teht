@@ -90,11 +90,6 @@ header h2 {
 }
 
 
-
-table {
-
-}
-
 #main-table {
   border-spacing: 0;
   margin: 20px;
@@ -176,11 +171,6 @@ select {
 
 /* classes */
 
-
-.form-control {
-
-}
-
 .highlight {
   font-weight: bold;
   background-color: rgb(194, 194, 235);
@@ -235,9 +225,7 @@ select {
   background-color: var(--popup);
   color: var(--popupText);
 }
-.leaflet-popup {
-  /* no changes nesesary */
-}
+
 
 .user-option {
   /* button for user info change */
