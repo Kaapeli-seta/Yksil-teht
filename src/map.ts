@@ -1,5 +1,8 @@
 import * as L from 'leaflet';
 import {Restaurant} from './types/Restaurant';
+import SodexoM from "../public/img/Sodexo-marker-50x82.png"
+import CompassM from "../public/img/Compass-marker-50x82.png"
+import SelfM from "../public/img/self-marker-50x82.png"
 
 
 
@@ -25,14 +28,15 @@ const setMap = () => {
   }
 }
 
+
 const CompassGIcon = L.icon({
-  iconUrl: '../img/Compass-marker-50x82.png',
+  iconUrl: CompassM,
   iconSize:     [25, 41], // size of the icon
   iconAnchor:   [0, 28], // point of the icon which will correspond to marker's location
   popupAnchor:  [12.5, -20.5] // point from which the popup should open relative to the iconAnchor
 });
 const sodexoIcon = L.icon({
-  iconUrl: '../img/Sodexo-marker-50x82.png',
+  iconUrl: SodexoM,
   iconSize:     [25, 41], 
   iconAnchor:   [0, 28], 
   popupAnchor:  [12.5, -20.5] 
@@ -66,6 +70,7 @@ const newMarkers = (restaurant: Restaurant, markerLayer: L.FeatureGroup, tr: HTM
     })
 };
 
+
 const selfMarker = (mapView: L.Map | undefined, crd: GeolocationCoordinates) => {
   if (!mapView) {
     return;
@@ -76,7 +81,7 @@ const selfMarker = (mapView: L.Map | undefined, crd: GeolocationCoordinates) => 
   mapView.flyTo(new L.LatLng(selfLocation[0], selfLocation[1]))
   const markerView : L.Marker = L.marker(selfLocation)
   const SelfIcon = L.icon({
-    iconUrl: '../img/self-marker-50x82.png',
+    iconUrl: SelfM,
     iconSize:     [25, 41],
     iconAnchor:   [0, 28], 
     popupAnchor:  [12.5, -20.5] 

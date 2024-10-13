@@ -20,7 +20,7 @@ if (loginButtonFrame) {
           <section id="login">
             <div id="dialog-head">
             <h2>Login</h2>
-            <button id="close" class="user-option">X</button>
+            <button id="close"><p>×</p></button>
           </div>
             <p>Login to get user data</p>
             <form id="login-form">
@@ -33,7 +33,7 @@ if (loginButtonFrame) {
                 <input id="password" class="inputfield" type="password" name="password" name="password" placeholder="Password" minlength="5" maxlength="15" title="Min 5 Max 15 characters" required>
               </div>
               <div class="form-control">
-                <input type="submit" value="Login" class="button">
+                <input type="submit" value="Login" class="user-option">
               </div>
             </form>
           </section>`
@@ -47,7 +47,7 @@ if (loginButtonFrame) {
         <section id="profile">
           <div id="dialog-head">
             <h2>Profile</h2>
-            <button id="close" class="user-option">X</button>
+            <button id="close"><p>×</p></button>
           </div>
           <p>Username: <span id="username-target" placeholder="UserName" minlength="3" maxlength="15" title="Min 3 Max 15 characters" required></span></p>
           <p>Email: <span id="email-target"></span></p>
@@ -116,7 +116,7 @@ function userEditFormatter (usernameTarget: HTMLSpanElement, emailTarget: HTMLSp
         </div>
 
         <div class="form-control">
-          <input type="submit" value="Update" class="button">
+          <input type="submit" value="Update" class="user-option">
         </div>
       </form>
     `

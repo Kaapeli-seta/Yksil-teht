@@ -9,15 +9,15 @@ html {
 
 :root {
   --background: #f1f1f1;
-  --borders: black;
+  --borders: rgb(52, 130, 182);
   --text: black;
   --text2: #f1f1f1;
-  --Header: gray;
-  --footer: gray;
+  --Header: rgb(99, 164, 207);
+  --footer: rgb(99, 164, 207);
   --dialog: gray;
   --dialog2: black;
-  --dialogH: rgb(21, 161, 138);
-  --tr: black;
+  --hover: orange;
+  --tr: rgb(99, 164, 207);
   --listBackg: #f1f1f1;
   --popup: #f1f1f1;
   --popupText: #282A35;
@@ -26,7 +26,7 @@ html {
 :root.dark {
 
   --borders: #f1f1f1;
-  --dialogH: rgb(21, 161, 138);
+  --hover: rgb(21, 161, 138);
   --tr: black;
   --background: #3c3e47;
   --text: #f1f1f1;
@@ -129,11 +129,26 @@ tr {
   display: flex;
   justify-content: space-between;
   border: solid var(--tr);
+  border-radius: 20px;
   align-items: center;
 }
 
-td > button {
-
+tr button {
+  margin: 10px;
+  background: none;
+	color: var(--text);
+	border: thin solid var(--borders);
+  border-radius: 10px;
+  padding: 10PX;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+    transition: all 750ms;
+    font-size: 1em;
+    text-decoration: none;
+}
+tr button:hover {
+  background-color: var(--hover);
 }
 
 dialog {
@@ -224,7 +239,26 @@ select {
   /* no changes nesesary */
 }
 
+.user-option {
+  /* button for user info change */
+  margin: 10px;
+  background: none;
+	color: var(--text);
+	border: thin solid var(--borders);
+  border-radius: 10px;
+  padding: 10PX;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+    transition: all 750ms;
+    font-size: 1em;
+    text-decoration: none;
+}
 
+.user-option:hover {
+  /* button for user info change */
+  background-color: var(--hover);
+}
 
 
 
@@ -259,14 +293,13 @@ select {
 }
 
 #login-button-frame i:hover {
-  color: var(--dialogH);
+  color: var(--hover);
   font-size: 2.5rem;
 }
 
 
 #userinfo-main-page {
   display: flex;
-  flex: 1;
   flex-direction: row;
   align-items: center;
 }
@@ -286,13 +319,25 @@ select {
   background-color: #19191b;
 }
 
+#favorit-target {
+  font-weight: bold;
+}
+
+#username-target {
+  font-weight: bold;
+}
+
+#email-target {
+  font-weight: bold;
+}
+
 .inputfield {
   padding: 10px;
   margin: 10px auto 40px auto;
   width: 70%;
   background-color: inherit;
-  /* border: 3px solid var(--green); */
   border-radius: 10px;
+  transition: all 750ms;
 }
 
 .form-control label {
@@ -302,12 +347,11 @@ select {
 form input:required {
   border-right: 15px solid orange;
   border-radius: 6px;
-  transition: border-left 1s; 
+
 }
 
 form input:valid:required {
   border-right: 6px solid green;
-  transition: border-left 1s; 
   border-radius: 5px;
 }
 
@@ -372,6 +416,7 @@ form input:valid:required {
   width: 200px;
   height: 200px;
   border-radius: 50%;
+  border: solid var(--borders);
   transition: all .2s ease-in-out 
 }
 
@@ -380,13 +425,12 @@ form input:valid:required {
   cursor: pointer;
 }
 
-.user-option {
-  /* button for user info change */
-  margin: 10px;
+
+#close {
+  margin: 0;
   background: none;
+  border: none;
 	color: var(--text);
-	border: thin solid var(--borders);
-  border-radius: 10px;
   padding: 10PX;
 	font: inherit;
 	cursor: pointer;
@@ -395,6 +439,17 @@ form input:valid:required {
     font-size: 1em;
     text-decoration: none;
 }
+
+#close p {
+  font-size: 3rem;
+  margin: 0;
+}
+
+#close:hover {
+  color: rgb(177, 16, 16);
+}
+
+
 
 #user-options{
   display: flex;
@@ -408,13 +463,29 @@ form input:valid:required {
 }
 
 
-.user-option:hover {
-  /* button for user info change */
-  background-color: var(--dialogH);
+
+#profile > p {
+  font-size: 1.2rem;
 }
 
+@media only screen and (max-width: 925px){
+  dialog {
+    min-width: 350px;
+  }
+  #map{
+    height: 300px;
+    display: block;
+  }
+  table {
+    display: block;
+    max-height: 40vh;
+  }
+  #main-content {
+    display: block;
+  }
 
+  #userinfo-main-page {
+    display: none;
+  }
 
-#edit-profile {
-  /* avatar change and changing userinfo*/
 }

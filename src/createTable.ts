@@ -114,7 +114,7 @@ const restaurantRow = (restaurant: Restaurant, modal: HTMLDialogElement) => {
 const restaurantModal = (restaurant: Restaurant, menu: DailyMenu) => {
     const {name, address, city, postalCode, phone, company} = restaurant;
     let html = `<h3>${name}</h3>
-      <button id="close" class="user-option">X</button>
+      <button id="close" class="user-option"><p>×</p></button>
       <p>${company}</p>
       <p>${address} ${postalCode} ${city}</p>
       <p>${phone}</p>
