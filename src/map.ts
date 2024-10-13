@@ -20,7 +20,6 @@ const setMap = () => {
 
   }).addTo(mapView);
   
-  console.log("Map wokrs")
   const markerLayer = L.featureGroup().addTo(mapView);
   return [mapView, markerLayer]
   } catch(error) {

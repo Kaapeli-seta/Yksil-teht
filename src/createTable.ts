@@ -37,7 +37,6 @@ const createTable = (restaurants: Restaurant[], markerLayer: L.FeatureGroup | un
     table.innerHTML = '';
     restaurants.forEach((restaurant) => {
         const tr = restaurantRow(restaurant, modal);
-        // const fav = restaurantRow(restaurant)[2] as HTMLButtonElement
         table.appendChild(tr);
         newMarkers(restaurant, markerLayer, tr);
         

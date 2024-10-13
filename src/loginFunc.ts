@@ -187,7 +187,6 @@ function userEditFormatter (usernameTarget: HTMLSpanElement, emailTarget: HTMLSp
       const avatarForm = document.querySelector('#avatar-form') as HTMLFormElement | null;
 
     if (avatarForm) {
-      console.log('form found')
       avatarForm.addEventListener('submit', async (evt) => {
         evt.preventDefault();
         const fd = new FormData(avatarForm);

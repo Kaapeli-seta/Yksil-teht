@@ -72,14 +72,13 @@ const addUserDataToDom = (
     if (favoritTarget) {
         const name = async (): Promise<Restaurant["name"]> => {return (await fetchData<Restaurant>(apiUrl + `/restaurants/${user.favouriteRestaurant}`)).name}
          name().then((name) => favoritTarget.innerHTML = name) ;
-         console.log(user.favouriteRestaurant)
         }
     })
 }
 
 
 const getUserData = async (token: string | null): Promise<User | void> => {
-    if(!token) {console.log('no token'); return;}
+    if(!token) {return;}
     const options: RequestInit = {headers: {Authorization: 'Bearer ' + token,},
     };
     return await fetchData<User>(apiUrl + '/users/token', options)

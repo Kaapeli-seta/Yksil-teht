@@ -26,9 +26,9 @@ export default defineConfig({
     },
     includeAssets: ['main.ccs'],
     manifest: {
-      name: 'vite pwa test',
-      short_name: 'vite-pwa',
-      description: 'test for vite pwa plugin',
+      name: 'Student reataurants',
+      short_name: 'Restuarants',
+      description: 'Project',
       theme_color: '#ffffff',
       icons: [
         {

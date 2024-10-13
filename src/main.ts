@@ -49,7 +49,6 @@ const markers = mapSet[1] as L.FeatureGroup
 
 const fetchRest = async ():Promise<Restaurant[]> =>  {
   const restaurants = await fetchData<Restaurant[]>(apiUrl + '/restaurants');
-  console.log(restaurants);
   return restaurants;
 };
 
@@ -72,10 +71,6 @@ const sucsess = async (pos: GeolocationPosition) =>{
   const restaurants = await fetchRest();
   const crd = pos.coords;
   selfMarker(map, crd)
-      // Sort by distanse ----
-
-      console.log(crd)
-      console.log(restaurants)
 
   setData(restaurants, crd)
   } catch (error) {
@@ -102,7 +97,6 @@ function NewGeoSort(restaurants: Restaurant[], crd: GeolocationCoordinates) {
 function SorterSet(modal: HTMLDialogElement, restaurants: Restaurant[], restaurantsD?: Restaurant[], crd?: GeolocationCoordinates) {
   const valS = sorter.value
   if (crd && restaurantsD && (valS === 'distance')) {
-    console.log(valS)
     createTable(restaurantsD, markers, map, modal)
   }
   if (valS === 'name'){
