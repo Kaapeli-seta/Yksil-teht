@@ -1,4 +1,4 @@
-import L from "leaflet";
+import * as L from "leaflet";
 import { fetchData } from "./functions";
 import { newMarkers } from "./map";
 import { DailyMenu } from "./types/Menu";
@@ -42,6 +42,7 @@ const createTable = (restaurants: Restaurant[], markerLayer: L.FeatureGroup | un
         newMarkers(restaurant, markerLayer, tr);
         
         tr.addEventListener('click', async () => {
+          console.log('something happened')
           // remove all highlights
           const allHighs = document.querySelectorAll('.highlight');
           allHighs.forEach((high) => {
