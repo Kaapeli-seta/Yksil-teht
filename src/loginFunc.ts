@@ -25,12 +25,12 @@ if (loginButtonFrame) {
             <p>Login to get user data</p>
             <form id="login-form">
               <div class="form-control">
-                <input id="username" type="text" name="username">
                 <label for="username">Usename</label>
+                <input id="username" class="inputfield" type="text" name="username" placeholder="UserName" minlength="3" maxlength="15" title="Min 3 Max 15 characters" required>
               </div>
               <div class="form-control">
-                <input id="password" type="password" name="password">
                 <label for="password">Password</label>
+                <input id="password" class="inputfield" type="password" name="password" name="password" placeholder="Password" minlength="5" maxlength="15" title="Min 5 Max 15 characters" required>
               </div>
               <div class="form-control">
                 <input type="submit" value="Login" class="button">
@@ -49,8 +49,8 @@ if (loginButtonFrame) {
             <h2>Profile</h2>
             <button id="close" class="user-option">X</button>
           </div>
-          <p>Username: <span id="username-target"></span></p>
-          <p>email: <span id="email-target"></span></p>
+          <p>Username: <span id="username-target" placeholder="UserName" minlength="3" maxlength="15" title="Min 3 Max 15 characters" required></span></p>
+          <p>Email: <span id="email-target"></span></p>
           <p>Favorit Restaurant: <span id="favorit-target"></span></p>
           <form id="select-form">
           <div id="avatar-background">
@@ -106,13 +106,13 @@ function userEditFormatter (usernameTarget: HTMLSpanElement, emailTarget: HTMLSp
       <form id="profile-form">
 
         <div class="form-control">
-          <input id="profile-username" type="text" name="username">
           <label for="profile-username">Username</label>
+          <input id="profile-username" class="inputfield" type="text" name="username" placeholder="UserName" minlength="3" maxlength="15" title="Min 3 Max 15 characters" required>
         </div>
 
         <div class="form-control">
-          <input id="profile-email" type="email" name="email">
           <label for="profile-email">Email</label>
+          <input id="profile-email" class="inputfield" type="email" name="email" placeholder="Email" minlength="3" maxlength="15" title="Min 3 Max 15 characters" required>
         </div>
 
         <div class="form-control">
@@ -137,7 +137,6 @@ function userEditFormatter (usernameTarget: HTMLSpanElement, emailTarget: HTMLSp
           evt.preventDefault();
           const token = localStorage.getItem('token')
           if (!token) {
-            alert('please log in')
             return
           }
           if (!profileUsernameInput || !profileEmailInput){
@@ -154,7 +153,6 @@ function userEditFormatter (usernameTarget: HTMLSpanElement, emailTarget: HTMLSp
           console.log(updateResult)
     
           addUserDataToDom(token, usernameTarget, emailTarget)
-          alert('update ok')
         } catch (error) {
             console.log((error as Error).message);
           }

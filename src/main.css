@@ -16,7 +16,7 @@ html {
   --footer: gray;
   --dialog: gray;
   --dialog2: black;
-  --dialogH: orange;
+  --dialogH: rgb(21, 161, 138);
   --tr: black;
   --listBackg: #f1f1f1;
   --popup: #f1f1f1;
@@ -26,7 +26,7 @@ html {
 :root.dark {
 
   --borders: #f1f1f1;
-  --dialogH: orange;
+  --dialogH: rgb(21, 161, 138);
   --tr: black;
   --background: #3c3e47;
   --text: #f1f1f1;
@@ -40,16 +40,34 @@ html {
   --popupText: #f1f1f1;
 }
 
+@font-face {
+  font-family: 'EudQLD';
+  src: url(./fonts/EduQLDBeginner-VariableFont_wght.ttf) format('truetype');
+  font-style: normal;
+}
+
 /* Main elements */
 body {
+  
   background-color: #f0f0f0;
   font-family: sans-serif;
   margin: 0;
   padding: 0;
 }
 
+#container {
+  font-family: 'EudQLD',Arial, Helvetica, sans-serif;
+}
+
 footer {
   text-align: center;
+  background-color: var(--footer);
+  position: fixed;
+  width: 100%;
+  position: fixed;
+  bottom: 0px;
+  text-align: center;
+  padding: 10px;
 }
 footer p {
   margin: auto;
@@ -64,11 +82,11 @@ header {
 }
 
 header h1 {
-
+ color: var(--text);
 }
 
 header h2 {
-  
+  color: var(--text);
 }
 
 
@@ -225,19 +243,26 @@ select {
 }
 #login-button-frame {
   background: none;
-  margin: 5px;
+  margin-right: 20px;
 	color: var(--text);
 	border: none;
 	padding: 0;
 	font: inherit;
 	cursor: pointer;
 	outline: inherit;
-  transition: all 750ms;
+  
 }
 
 #login-button-frame i {
   font-size: 2rem;
+  transition: all 750ms;
 }
+
+#login-button-frame i:hover {
+  color: var(--dialogH);
+  font-size: 2.5rem;
+}
+
 
 #userinfo-main-page {
   display: flex;
@@ -248,6 +273,8 @@ select {
 
 #userinfo-main-page p {
   margin: 20px;
+  color: var(--text);
+  font-size: 1.5rem;
 }
 
 
@@ -255,7 +282,33 @@ select {
   width: 50px;
   height: 50px;
   border-radius: 50%;
+  border: solid var(--borders);
   background-color: #19191b;
+}
+
+.inputfield {
+  padding: 10px;
+  margin: 10px auto 40px auto;
+  width: 70%;
+  background-color: inherit;
+  /* border: 3px solid var(--green); */
+  border-radius: 10px;
+}
+
+.form-control label {
+  display: block;
+}
+
+form input:required {
+  border-right: 15px solid orange;
+  border-radius: 6px;
+  transition: border-left 1s; 
+}
+
+form input:valid:required {
+  border-right: 6px solid green;
+  transition: border-left 1s; 
+  border-radius: 5px;
 }
 
 
