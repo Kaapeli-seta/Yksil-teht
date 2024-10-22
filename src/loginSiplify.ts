@@ -3,7 +3,7 @@ import { UpdateResult } from "./interfaces/UpdateResult";
 import { LoginUser, UpdateUser, User } from "./interfaces/User";
 import { Restaurant } from "./types/Restaurant";
 import { apiUrl, uploadUrl } from "./variables";
-
+import altImage from '../public/img/PageIcon-256x256-alt.png'
 
 
 const login = async (passwordInput:HTMLInputElement | null ,usernameInput:HTMLInputElement | null): Promise<LoginUser> => {
@@ -57,21 +57,20 @@ const addUserDataToDom = (
     const avatarMainPage =  document.querySelector('#avatar-main-page') as HTMLImageElement;
     const userMainPage = document.querySelector('#username-main-page') as HTMLSpanElement;
     if (userMainPage) {userMainPage.innerHTML = user.username;} 
-    if (avatarMainPage) {
-      avatarMainPage.src = uploadUrl + user.avatar;
-    }
-
+    if (avatarMainPage) {avatarMainPage.src = user.avatar ? uploadUrl + user.avatar : altImage;}
 
     //update the moadal if awailable
 
     if (usernameTarget) {usernameTarget.innerHTML = user.username;} 
     if (emailTarget) {emailTarget.innerHTML = user.email;}
-    if (avatarTarget) {
-      avatarTarget.src = uploadUrl + user.avatar;
-    }
+    if (avatarTarget) {avatarTarget.src = user.avatar ? uploadUrl + user.avatar : altImage;}
     if (favoritTarget) {
-        const name = async (): Promise<Restaurant["name"]> => {return (await fetchData<Restaurant>(apiUrl + `/restaurants/${user.favouriteRestaurant}`)).name}
-         name().then((name) => favoritTarget.innerHTML = name) ;
+        const favName = async (): Promise<Restaurant["name"] | undefined> => {
+          if(user.favouriteRestaurant) {
+            return (await fetchData<Restaurant>(apiUrl + `/restaurants/${user.favouriteRestaurant}`)).name
+          } else{return}
+      }
+         favName().then((favName) => favoritTarget.innerHTML = favName ? favName : 'None') ;
         }
     })
 }

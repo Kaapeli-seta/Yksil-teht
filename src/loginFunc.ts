@@ -1,6 +1,7 @@
 
 import {fetchData} from './functions';
 import {UpdateResult} from './interfaces/UpdateResult';
+import { UpdateUser } from './interfaces/User';
 
 // import {UploadResult} from './interfaces/UploadResult';
 import { addUserDataToDom, updateUserData, login } from './loginSiplify';
@@ -18,25 +19,61 @@ if (loginButtonFrame) {
         if (!token) {
           modal.innerHTML = `    
           <section id="login">
-            <div id="dialog-head">
-            <h2>Login</h2>
-            <button id="close"><p>×</p></button>
-          </div>
+
+          <div id="dialog-head">
+              <h2>Login</h2>
+              <button id="close"><p>×</p></button>
+            </div>
+
             <p>Login to get user data</p>
+
             <form id="login-form">
               <div class="form-control">
-                <label for="username">Usename</label>
-                <input id="username" class="inputfield" type="text" name="username" placeholder="UserName" minlength="3" maxlength="15" title="Min 3 Max 15 characters" required>
+                <label for="username-login">Username</label>
+                <input id="username-login" class="inputfield" type="text" name="username" placeholder="UserName" minlength="3" maxlength="15" title="Min 3 Max 15 characters" required>
               </div>
+
               <div class="form-control">
-                <label for="password">Password</label>
-                <input id="password" class="inputfield" type="password" name="password" name="password" placeholder="Password" minlength="5" maxlength="15" title="Min 5 Max 15 characters" required>
+                <label for="password-login">Password</label>
+                <input id="password-login" class="inputfield" type="password" name="password" name="password" placeholder="Password" minlength="5" maxlength="15" title="Min 5 Max 15 characters" required>
               </div>
+
               <div class="form-control">
                 <input type="submit" value="Login" class="user-option">
               </div>
+
             </form>
-          </section>`
+          </section>
+
+          <hr>
+
+          <section id="register">
+            <div>
+            <h2>Register</h2>
+
+              <form id="register-form">
+              <div class="form-control">
+                <label for="username-register">Username</label>
+                <input id="username-register" class="inputfield" type="text" name="username" placeholder="UserName" minlength="3" maxlength="15" title="Min 3 Max 15 characters" required>
+              </div>
+              
+              <div class="form-control">
+                <label for="email-register">Email</label>
+                <input id="email-register" class="inputfield" type="email" name="Email" placeholder="User@mail.com" required>
+              </div>
+
+              <div class="form-control">
+                <label for="password-register">Password</label>
+                <input id="password-register" class="inputfield" type="password" name="password" name="password" placeholder="Password" minlength="5" maxlength="15" title="Min 5 Max 15 characters" required>
+              </div>
+
+              <div class="form-control">
+                <input type="submit" value="Register" class="user-option">
+              </div>
+
+            </div>
+          </section>
+          `
           const closer = document.querySelector('#close') as HTMLButtonElement;
           closer.addEventListener('click', () => {
             modal.close();
@@ -53,10 +90,12 @@ if (loginButtonFrame) {
           <p>Email: <span id="email-target"></span></p>
           <p>Favorit Restaurant: <span id="favorit-target"></span></p>
           <form id="select-form">
+
           <div id="avatar-background">
-          <p><i class="fa-solid fa-pen-to-square"></i></p>
             <input type="image" id="avatar-target" src="" name="saveForm" class=""/>
+            <p><i class="fa-solid fa-pen-to-square"></i></p>
           </div>
+          
             <div class="form-control" id="user-options">
               <input type="submit" id="profile-info" value="Eddit profile" class="user-option">
               
@@ -107,12 +146,12 @@ function userEditFormatter (usernameTarget: HTMLSpanElement, emailTarget: HTMLSp
 
         <div class="form-control">
           <label for="profile-username">Username</label>
-          <input id="profile-username" class="inputfield" type="text" name="username" placeholder="UserName" minlength="3" maxlength="15" title="Min 3 Max 15 characters" required>
+          <input id="profile-username" class="inputfield" type="text" name="username" placeholder="UserName" minlength="3" maxlength="15" title="Min 3 Max 15 characters">
         </div>
 
         <div class="form-control">
           <label for="profile-email">Email</label>
-          <input id="profile-email" class="inputfield" type="email" name="email" placeholder="Email" minlength="3" maxlength="15" title="Min 3 Max 15 characters" required>
+          <input id="profile-email" class="inputfield" type="email" name="email" placeholder="Email" minlength="3" maxlength="15" title="Min 3 Max 15 characters">
         </div>
 
         <div class="form-control">
@@ -142,13 +181,14 @@ function userEditFormatter (usernameTarget: HTMLSpanElement, emailTarget: HTMLSp
           if (!profileUsernameInput || !profileEmailInput){
             throw new Error('elementti ei saatavilla')
           }
-          const username = profileUsernameInput.value;
-          const email = profileEmailInput.value;
+          const username = profileUsernameInput.value as string | undefined;
+          const email = profileEmailInput.value as string | undefined;
     
-          const data = {
-            username,
-            email
-          };
+          const data = {} as UpdateUser;
+          data.username = username ? username : undefined
+          data.email = email ? email : undefined
+
+
           const updateResult = await updateUserData(data, token);
           console.log(updateResult)
     
@@ -221,10 +261,10 @@ const logoutButton = document.querySelector('#logout');
 
 // select inputs
 const usernameInput = document.querySelector(
-  '#username'
+  '#username-login'
 ) as HTMLInputElement | null;
 const passwordInput = document.querySelector(
-  '#password'
+  '#password-login'
 ) as HTMLInputElement | null;
 
 

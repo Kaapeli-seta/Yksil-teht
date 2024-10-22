@@ -58,16 +58,35 @@ const createTable = (restaurants: Restaurant[], markerLayer: L.FeatureGroup | un
 const restaurantRow = (restaurant: Restaurant, modal: HTMLDialogElement) => {
     const {name, address, company, city, _id} = restaurant;
     const tr = document.createElement('tr');
-    const nameCell = document.createElement('td');
+
+    const nameCell = document.createElement('p');
     nameCell.innerText = name;
-    const addressCell = document.createElement('td');
+    nameCell.className = "td-name"
+
+    const addressCell = document.createElement('p');
     addressCell.innerText = address;
+    addressCell.className = "td-address"
+
+
+    const localCell = document.createElement('td');
+    localCell.className = "td-localCell"
+    localCell.append(nameCell,addressCell)
+    
+
+
     const companyCell = document.createElement('td');
     companyCell.innerText = company;
+    companyCell.className = "td-company"
+
     const cityCell = document.createElement('td');
     cityCell.innerText = city;
+    cityCell.className = "td-city"
+    
+    
     const MbuttonCell = document.createElement('button');
     MbuttonCell.innerText = 'Menu';
+    MbuttonCell.className = "MButton"
+
     MbuttonCell.addEventListener('click', async () => {
         try{
             // fetch menu
@@ -87,7 +106,9 @@ const restaurantRow = (restaurant: Restaurant, modal: HTMLDialogElement) => {
       });
     
     const FbuttonCell = document.createElement('button');
+    FbuttonCell.className = "FButton"
     const token = localStorage.getItem('token');
+
     if (!token){
         FbuttonCell.disabled = true
     }
@@ -102,12 +123,7 @@ const restaurantRow = (restaurant: Restaurant, modal: HTMLDialogElement) => {
           addUserDataToDom(token)
       });
 
-    tr.appendChild(nameCell);
-    tr.appendChild(addressCell);
-    tr.appendChild(companyCell);
-    tr.appendChild(cityCell);
-    tr.appendChild(MbuttonCell);
-    tr.appendChild(FbuttonCell);
+    tr.append(localCell,companyCell,cityCell,MbuttonCell,FbuttonCell)
     return tr;
 };
   
@@ -143,8 +159,10 @@ const restaurantModal = (restaurant: Restaurant, menu: DailyMenu) => {
 const errorModal = (message: string) => {
     const html = `
         <h3>Error</h3>
+        <button id="close" class="user-option"><p>×</p></button>
         <p>${message}</p>
         `;
+
     return html;
 };
 

@@ -56,7 +56,7 @@ body {
 }
 
 #container {
-  font-family: 'EudQLD',Arial, Helvetica, sans-serif;
+/*   font-family: 'EudQLD',Arial, Helvetica, sans-serif; */
 }
 
 footer {
@@ -100,8 +100,6 @@ header h2 {
 }
 
 th {
-
-  border-bottom: 1px solid #ccc;
   font-weight: normal;
   padding: 0.5em 1em;
   text-align: left;
@@ -110,14 +108,23 @@ th {
 }
 
 td {
-  padding: 0.5em 1em;
-  text-align: center;
-  
-  width: 100px;
+  margin: 10px;
+}
+
+.td-localCell{
+  width: 200px;
+}
+
+.td-name {
+  font-size: 1.2em;
+}
+
+.td-address {
+font-size: 0.8em;
 }
 
 #main-table td {
-  overflow: hidden;
+  overflow:visible;
 }
 
 tr {
@@ -194,9 +201,9 @@ select {
   align-items: center;
 }
 
-.fa-moon {color: #f1c40f;}
+.fa-moon {color: white;}
 
-.fa-sun {color: #f39c12;}
+.fa-sun {color: white;}
 
 .checkbox-label .ball {
   background-color: #fff;
@@ -285,6 +292,16 @@ select {
   font-size: 2.5rem;
 }
 
+#login-button-frame span{
+  height: 44px;
+  transition: all 750ms;
+  border-radius: 10%;
+}
+
+#login-button-frame span:hover {
+  background-color: var(--hover);
+}
+
 
 #userinfo-main-page {
   display: flex;
@@ -300,8 +317,9 @@ select {
 
 
 #avatar-main-page {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
+  margin: 2px;
   border-radius: 50%;
   border: solid var(--borders);
   background-color: #19191b;
@@ -354,7 +372,7 @@ form input:valid:required {
 #map {
 
   display: flex;
-  flex: 2;
+  flex: 1;
 }
 
 #list {
@@ -385,7 +403,7 @@ form input:valid:required {
 
 
 #avatar-background {
-  position: relative;
+
   display: flex;
   width: 200px;
   height: 200px;
@@ -405,11 +423,11 @@ form input:valid:required {
   height: 200px;
   border-radius: 50%;
   border: solid var(--borders);
-  transition: all .2s ease-in-out 
+  transition: all 500ms ease-in-out 
 }
 
 #avatar-target:hover {
-  opacity: 10%;
+  opacity: 20%;
   cursor: pointer;
 }
 
@@ -437,8 +455,6 @@ form input:valid:required {
   color: rgb(177, 16, 16);
 }
 
-
-
 #user-options{
   display: flex;
   flex-direction: column;
@@ -450,13 +466,11 @@ form input:valid:required {
   z-index: -1;
 }
 
-
-
 #profile > p {
   font-size: 1.2rem;
 }
 
-@media only screen and (max-width: 925px){
+@media only screen and (max-width: 1035px){
   dialog {
     min-width: 350px;
   }
@@ -472,7 +486,15 @@ form input:valid:required {
     display: block;
   }
 
-  #userinfo-main-page {
+}
+
+
+
+@media only screen and (max-width: 925px){
+
+}
+@media only screen and (max-width: 625px){
+  #userinfo-main-page p {
     display: none;
   }
 

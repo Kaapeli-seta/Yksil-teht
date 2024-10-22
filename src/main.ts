@@ -34,8 +34,8 @@ if (!token) {
   }
 }
 if (token){
-  const Loginbutton = document.querySelector('#login-button-frame') as HTMLButtonElement
-  Loginbutton.innerHTML = `<i class="fa-solid fa-gears"></i>`
+  const Loginbutton = document.querySelector('#login-button-frame i') as HTMLButtonElement
+  Loginbutton.style.display = "none"
 }
 setLoginModal(modal);
 addUserDataToDom(token)
@@ -61,6 +61,10 @@ const error = async (err: GeolocationPositionError) => {
   } catch (error) {
     modal.innerHTML = errorModal((error as Error).message);
     modal.showModal();
+    const closer = document.querySelector('#close') as HTMLButtonElement;
+    closer.addEventListener('click', () => {
+      modal.close();
+    }, {once: true});
   }
 };
 

@@ -14,9 +14,10 @@ const setMap = () => {
     zoom: 11,
   });
 
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  L.tileLayer('http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}', {
     maxZoom: 19,
     minZoom: 4,
+    subdomains:['mt0','mt1','mt2','mt3']
 
   }).addTo(mapView);
   
@@ -31,14 +32,14 @@ const setMap = () => {
 const CompassGIcon = L.icon({
   iconUrl: CompassM,
   iconSize:     [25, 41], // size of the icon
-  iconAnchor:   [0, 28], // point of the icon which will correspond to marker's location
-  popupAnchor:  [12.5, -20.5] // point from which the popup should open relative to the iconAnchor
+  iconAnchor:   [14, 38], // point of the icon which will correspond to marker's location
+  popupAnchor:  [0, -20.5] // point from which the popup should open relative to the iconAnchor
 });
 const sodexoIcon = L.icon({
   iconUrl: SodexoM,
-  iconSize:     [25, 41], 
-  iconAnchor:   [0, 28], 
-  popupAnchor:  [12.5, -20.5] 
+  iconSize:     [25, 41],
+  iconAnchor:   [14, 38], 
+  popupAnchor:  [0, -20.5] 
 });
 
 
@@ -82,8 +83,8 @@ const selfMarker = (mapView: L.Map | undefined, crd: GeolocationCoordinates) => 
   const SelfIcon = L.icon({
     iconUrl: SelfM,
     iconSize:     [25, 41],
-    iconAnchor:   [0, 28], 
-    popupAnchor:  [12.5, -20.5] 
+    iconAnchor:   [14, 38], 
+    popupAnchor:  [0, -20.5] 
 });
   markerView.setIcon(SelfIcon)
   markerSelfL.addLayer(markerView)
